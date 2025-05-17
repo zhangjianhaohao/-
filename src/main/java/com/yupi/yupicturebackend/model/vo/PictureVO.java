@@ -1,5 +1,6 @@
 package com.yupi.yupicturebackend.model.vo;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.annotation.*;
 import com.yupi.yupicturebackend.model.entity.Picture;
@@ -106,8 +107,9 @@ public class PictureVO implements Serializable {
         if (pictureVO == null) {
             return null;
         }
-        Picture picture = new Picture();
-        BeanUtils.copyProperties(pictureVO, picture);
+        //Picture picture = new Picture();
+        //BeanUtils.copyProperties(pictureVO, picture);
+        Picture picture = BeanUtil.copyProperties(pictureVO, Picture.class);
         // 类型不同，需要转换
         picture.setTags(JSONUtil.toJsonStr(pictureVO.getTags()));
         return picture;
@@ -120,8 +122,10 @@ public class PictureVO implements Serializable {
         if (picture == null) {
             return null;
         }
-        PictureVO pictureVO = new PictureVO();
-        BeanUtils.copyProperties(picture, pictureVO);
+        //  PictureVO pictureVO = new PictureVO();
+        // BeanUtils.copyProperties(picture, pictureVO);
+        PictureVO pictureVO = BeanUtil.copyProperties(picture, PictureVO.class);
+
         // 类型不同，需要转换
         pictureVO.setTags(JSONUtil.toList(picture.getTags(), String.class));
         return pictureVO;

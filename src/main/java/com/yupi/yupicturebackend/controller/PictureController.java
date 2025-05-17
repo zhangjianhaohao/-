@@ -1,5 +1,6 @@
 package com.yupi.yupicturebackend.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yupi.yupicturebackend.annotation.AuthCheck;
@@ -195,8 +196,9 @@ public class PictureController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 在此处将实体类和 DTO 进行转换
-        Picture picture = new Picture();
-        BeanUtils.copyProperties(pictureEditRequest, picture);
+//        Picture picture = new Picture();
+//        BeanUtils.copyProperties(pictureEditRequest, picture);
+        Picture picture = BeanUtil.copyProperties(pictureEditRequest, Picture.class);
         // 注意将 list 转为 string
         picture.setTags(JSONUtil.toJsonStr(pictureEditRequest.getTags()));
         // 设置编辑时间
@@ -218,6 +220,9 @@ public class PictureController {
         boolean result = pictureService.updateById(picture);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
+
+
+
     }
 
     @GetMapping("/tag_category")
