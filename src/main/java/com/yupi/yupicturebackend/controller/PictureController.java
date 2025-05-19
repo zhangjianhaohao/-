@@ -2,6 +2,7 @@ package com.yupi.yupicturebackend.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -85,39 +86,47 @@ public class PictureController {
         // 普通用户默认只能查看已过审的数据
         pictureQueryRequest.setReviewStatus(PictureReviewStatusEnum.PASS.getValue());
 
-        // 构建缓存 key
-        // 构建缓存 key
+        // 构建缓存通用key
         String queryCondition = JSONUtil.toJsonStr(pictureQueryRequest);
         String hashKey = DigestUtils.md5DigestAsHex(queryCondition.getBytes());
         String cacheKey = "yupicture:listPictureVOByPage:" + hashKey;
 //      等同于  String.format("yupicture:listPictureVOByPage:%s",hashKey);
-        // 从本地缓存中查询
-        String cachedValue = LOCAL_CACHE.getIfPresent(cacheKey);
+        // 1.从本地缓存中查询
+        String cachedValue;
+        cachedValue = LOCAL_CACHE.getIfPresent(cacheKey);
+        if(StrUtil.isNotBlank(cachedValue)){
+            Page<PictureVO> cachedPage = JSONUtil.toBean(cachedValue, Page.class);
+            return ResultUtils.success(cachedPage);
+        }
 
-        String redisKey = "yupicture:listPictureVOByPage:" + hashKey;
-        // 从 Redis 缓存中查询
-       // ValueOperations<String, String> valueOps = stringRedisTemplate.opsForValue();
-       // String cachedValue = valueOps.get(redisKey);
-        if (cachedValue != null) {
-            // 如果缓存命中，返回结果
+        // 2.从 Redis 缓存中查询
+        ValueOperations<String, String> valueOps = stringRedisTemplate.opsForValue();
+         cachedValue = valueOps.get(cacheKey);
+        if (StrUtil.isNotBlank(cachedValue)) {
+            //使用cachedValue！= null
+            //意味着cachedvalue
+            // 如果缓存命中，更新本地缓存，并且返回结果
+            LOCAL_CACHE.put(cacheKey,cachedValue);
             Page<PictureVO> cachedPage = JSONUtil.toBean(cachedValue, Page.class);
             return ResultUtils.success(cachedPage);
         }
 
 
-        // 查询数据库
+        //3.都没有命中，查询数据库
         Page<Picture> picturePage = pictureService.page(new Page<>(current, size),
                 pictureService.getQueryWrapper(pictureQueryRequest));
         // 获取封装类
         Page<PictureVO> pictureVOPage = pictureService.getPictureVOPage(picturePage, request);
 
-        // 存入 Redis 缓存
+        //3.1 转换为jsonStr
         String cacheValue = JSONUtil.toJsonStr(pictureVOPage);
+        //4.写入本地缓存
+        LOCAL_CACHE.put(cacheKey,cacheValue);
+        //5.存入 Redis 缓存
         // 5 - 10 分钟随机过期，防止雪崩
         int cacheExpireTime = 300 +  RandomUtil.randomInt(0, 300);
-        //valueOps.set(redisKey, cacheValue, cacheExpireTime, TimeUnit.SECONDS);
-        //写入本地缓存
-        LOCAL_CACHE.put(cacheKey,cacheValue);
+        valueOps.set(cacheKey, cacheValue, cacheExpireTime, TimeUnit.SECONDS);
+
         // 返回结果
         return ResultUtils.success(pictureVOPage);
     }
