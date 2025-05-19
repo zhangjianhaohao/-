@@ -34,6 +34,7 @@ import java.util.List;
 
 @Slf4j
 @Component
+@Deprecated
 public class FileManager {
 
     @Resource
@@ -61,6 +62,7 @@ public class FileManager {
             // 创建临时文件
             file = File.createTempFile(uploadPath, null);
             // multipartFile.transferTo(file);
+            //从远程下载图片至临时文件
             HttpUtil.downloadFile(fileUrl, file);
             // 上传图片
             // ... 其余代码保持不变
@@ -209,7 +211,9 @@ public class FileManager {
         final long ONE_M = 1024 * 1024L;
         ThrowUtils.throwIf(fileSize > 2 * ONE_M, ErrorCode.PARAMS_ERROR, "文件大小不能超过 2M");
         // 2. 校验文件后缀
-        String fileSuffix = FileUtil.getSuffix(multipartFile.getOriginalFilename());
+        String originalFilename = multipartFile.getOriginalFilename();
+        String fileSuffix = FileUtil.getSuffix(originalFilename);
+//        String fileSuffix = FileUtil.getSuffix(multipartFile.getOriginalFilename());
         // 允许上传的文件后缀
         final List<String> ALLOW_FORMAT_LIST = Arrays.asList("jpeg", "jpg", "png", "webp");
         ThrowUtils.throwIf(!ALLOW_FORMAT_LIST.contains(fileSuffix), ErrorCode.PARAMS_ERROR, "文件类型错误");

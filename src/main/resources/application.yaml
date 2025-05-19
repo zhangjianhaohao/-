@@ -11,6 +11,14 @@ spring:
     url: jdbc:mysql://localhost:3306/yu_picture
     username: root
     password: 1234
+  # Redis 配置
+  redis:
+    database: 1
+    host: 192.168.147.100
+    port: 6379
+    timeout: 5000
+#  profiles:
+#    active: local
   ##开放更大文件体积
   servlet:
     multipart:
