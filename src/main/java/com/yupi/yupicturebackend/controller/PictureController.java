@@ -16,6 +16,7 @@ import com.yupi.yupicturebackend.exception.BusinessException;
 import com.yupi.yupicturebackend.exception.ErrorCode;
 import com.yupi.yupicturebackend.exception.ThrowUtils;
 import com.yupi.yupicturebackend.model.dto.picture.*;
+import com.yupi.yupicturebackend.model.dto.space.PictureEditRequest;
 import com.yupi.yupicturebackend.model.entity.Picture;
 import com.yupi.yupicturebackend.model.entity.User;
 import com.yupi.yupicturebackend.model.enums.PictureReviewStatusEnum;
@@ -194,7 +195,7 @@ public class PictureController {
     }
 
     /**
-     * 更新图片（仅管理员可用）
+     * 更新图片=》修改审核参数（仅管理员可用）
      */
     @PostMapping("/update")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
