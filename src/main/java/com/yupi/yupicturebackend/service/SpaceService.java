@@ -2,12 +2,14 @@ package com.yupi.yupicturebackend.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yupi.yupicturebackend.model.dto.space.SpaceAddRequest;
 import com.yupi.yupicturebackend.model.dto.space.SpaceQueryRequest;
 
 import com.yupi.yupicturebackend.model.entity.Space;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import com.yupi.yupicturebackend.model.entity.User;
 import com.yupi.yupicturebackend.model.vo.SpaceVO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 * @createDate 2025-05-20 16:40:14
 */
 public interface SpaceService extends IService<Space> {
+
+    long addSpace(SpaceAddRequest spaceAddRequest, User loginUser);
 
     QueryWrapper<Space> getQueryWrapper(SpaceQueryRequest spaceQueryRequest);
 
