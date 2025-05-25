@@ -99,6 +99,10 @@ public class Picture implements Serializable {
      * 创建用户 id
      */
     private Long userId;
+    /**
+     * 图片主色调
+     */
+    private String picColor;
 
     /**
      * 空间id

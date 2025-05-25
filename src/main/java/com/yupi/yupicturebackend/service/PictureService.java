@@ -5,10 +5,8 @@ import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yupi.yupicturebackend.model.dto.picture.PictureQueryRequest;
-import com.yupi.yupicturebackend.model.dto.picture.PictureReviewRequest;
-import com.yupi.yupicturebackend.model.dto.picture.PictureUploadByBatchRequest;
-import com.yupi.yupicturebackend.model.dto.picture.PictureUploadRequest;
+import com.yupi.yupicturebackend.api.aliyunai.model.CreateOutPaintingTaskResponse;
+import com.yupi.yupicturebackend.model.dto.picture.*;
 import com.yupi.yupicturebackend.model.dto.space.PictureEditRequest;
 import com.yupi.yupicturebackend.model.entity.Picture;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -25,6 +23,7 @@ import java.util.List;
 * @createDate 2025-04-28 17:03:10
 */
 public interface PictureService extends IService<Picture> {
+    void editPictureByBatch(PictureEditByBatchRequest pictureEditByBatchRequest,User loginUser);
     /**
      * 删除图片
      * @param pictureId
@@ -88,4 +87,7 @@ public interface PictureService extends IService<Picture> {
     );
 
 
+    List<PictureVO> searchPictureByColor(Long spaceId, String picColor, User loginUser);
+
+    CreateOutPaintingTaskResponse createPictureOutPaintingTask(CreatePictureOutPaintingTaskRequest createPictureOutPaintingTaskRequest, User loginUser);
 }

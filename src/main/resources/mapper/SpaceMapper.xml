@@ -9,6 +9,7 @@
             <result property="spaceName" column="spaceName" jdbcType="VARCHAR"/>
             <result property="spaceLevel" column="spaceLevel" jdbcType="INTEGER"/>
             <result property="maxSize" column="maxSize" jdbcType="BIGINT"/>
+            <result property="spaceType" column="spaceType" jdbcType="INTEGER"/>
             <result property="maxCount" column="maxCount" jdbcType="BIGINT"/>
             <result property="totalSize" column="totalSize" jdbcType="BIGINT"/>
             <result property="totalCount" column="totalCount" jdbcType="BIGINT"/>
