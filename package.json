@@ -1,0 +1,29 @@
+{
+  "name": "personal-blog",
+  "version": "1.0.0",
+  "description": "基于Vuepress搭建的个人博客",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhangjianhaohao/-.git"
+  },
+  "keywords": [
+    "个人博客"
+  ],
+  "author": "zhangjianhaohao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhangjianhaohao/-/issues"
+  },
+  "homepage": "https://github.com/zhangjianhaohao/-#readme",
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+   "@vuepress/bundler-vite": "^2.0.0-rc.26",
+    "@vuepress/theme-default": "^2.0.0-rc.118",
+    "typescript": "^5.9.3",
+    "vuepress": "^2.0.0-rc.26"
+  }
+}
